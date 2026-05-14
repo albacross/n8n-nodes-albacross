@@ -11,6 +11,8 @@ export class AlbacrossApi implements ICredentialType {
 
 	displayName = 'Albacross API';
 
+	documentationUrl = 'https://help.albacross.com';
+
 	icon: Icon = 'file:albacross.svg';
 
 	properties: INodeProperties[] = [
