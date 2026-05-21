@@ -275,7 +275,7 @@ describe('AlbacrossTrigger node', () => {
 		});
 
 		describe('delete', () => {
-			it('DELETEs /n8n/hooks/:id and preserves static data so reactivation can PATCH-restore', async () => {
+			it('DELETEs /n8n/hooks/:id and clears static data so reactivation creates a fresh hook', async () => {
 				const { ctx, httpRequestWithAuthentication, staticData } = buildHookCtx({
 					staticData: { albacrossWorkflowId: 999, n8nWorkflowId: 'wf-1' },
 					httpResponse: undefined,
@@ -290,8 +290,8 @@ describe('AlbacrossTrigger node', () => {
 					url: '/n8n/hooks/999',
 					json: true,
 				});
-				expect(staticData.albacrossWorkflowId).toBe(999);
-				expect(staticData.n8nWorkflowId).toBe('wf-1');
+				expect(staticData.albacrossWorkflowId).toBeUndefined();
+				expect(staticData.n8nWorkflowId).toBeUndefined();
 			});
 
 			it('is a no-op when no Albacross workflow id is stored', async () => {
@@ -303,14 +303,15 @@ describe('AlbacrossTrigger node', () => {
 				expect(httpRequestWithAuthentication).not.toHaveBeenCalled();
 			});
 
-			it('swallows 404 responses (row already soft-deleted from a previous lifecycle)', async () => {
+			it('swallows 404 responses (row already soft-deleted from a previous lifecycle) and clears static data', async () => {
 				const { ctx, staticData } = buildHookCtx({
 					staticData: { albacrossWorkflowId: 999, n8nWorkflowId: 'wf-1' },
 					httpError: { httpCode: 404 },
 				});
 
 				await expect(node.webhookMethods.default.delete.call(ctx)).resolves.toBe(true);
-				expect(staticData.albacrossWorkflowId).toBe(999);
+				expect(staticData.albacrossWorkflowId).toBeUndefined();
+				expect(staticData.n8nWorkflowId).toBeUndefined();
 			});
 
 			it('rethrows non-404 errors', async () => {

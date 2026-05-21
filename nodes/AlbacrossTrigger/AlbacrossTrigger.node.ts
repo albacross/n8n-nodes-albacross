@@ -475,6 +475,7 @@ export class AlbacrossTrigger implements INodeType {
 					if (status !== 404) throw error;
 				}
 
+				clearAlbacrossStaticData(staticData);
 				return true;
 			},
 		},

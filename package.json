@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-albacross",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n community node for Albacross — receive identified-company leads in your n8n workflows.",
 	"license": "MIT",
 	"homepage": "https://github.com/albacross/n8n-nodes-albacross",
